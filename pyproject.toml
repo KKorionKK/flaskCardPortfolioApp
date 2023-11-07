@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "flask-auth-app"
+version = "0.1.0"
+description = ""
+authors = ["KKorionKK-Mac <cool.orion2015@yandex.ru>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+flask = "^3.0.0"
+psycopg2 = "^2.9.9"
+sqlalchemy = "^2.0.22"
+flask-sqlalchemy = "^3.1.1"
+click = "^8.1.7"
+flask-login = "^0.6.2"
+flask-wtf = "^1.2.1"
+flask-script = "^2.0.6"
+flask-bcrypt = "^1.0.1"
+python-dotenv = "^1.0.0"
+pyjwt = "^2.8.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
