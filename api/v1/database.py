@@ -25,7 +25,10 @@ class User(db.Model):
         self.created_at = datetime.utcnow()
         self.last_active = datetime.utcnow()
 
-        pwd = bcrypt.generate_password_hash(password.encode("utf-8"), rounds=int(current_app.config.get("BCRYPT_LOG_ROUNDS")))
+        pwd = bcrypt.generate_password_hash(
+            password.encode("utf-8"),
+            rounds=int(current_app.config.get("BCRYPT_LOG_ROUNDS")),
+        )
         self.password = pwd.decode("utf-8")
 
     def to_dict(self) -> dict:
@@ -38,29 +41,30 @@ class User(db.Model):
             "created_at": self.created_at,
             "last_active": self.last_active,
         }
-    
+
     def generate_auth_token(self):
         try:
             payload = {
-                "exp": datetime.utcnow() + timedelta(
+                "exp": datetime.utcnow()
+                + timedelta(
                     days=float(current_app.config.get("TOKEN_EXPIRATION_DAYS")),
                     seconds=float(current_app.config.get("TOKEN_EXPIRATION_SECONDS")),
                 ),
                 "iat": datetime.utcnow(),
                 "sub": self.user_uuid,
             }
-            token = jwt.encode(payload, current_app.config.get("SECRET_KEY"), algorithm="HS256")
+            token = jwt.encode(
+                payload, current_app.config.get("SECRET_KEY"), algorithm="HS256"
+            )
             return token
         except Exception as e:
             raise e
-    
+
     @staticmethod
     def decode_auth_token(auth_token):
         try:
             payload = jwt.decode(
-                auth_token,
-                current_app.config.get("SECRET_KEY"),
-                algorithms=["HS256"]
+                auth_token, current_app.config.get("SECRET_KEY"), algorithms=["HS256"]
             )
             return payload["sub"]
         except jwt.ExpiredSignatureError:
@@ -87,15 +91,16 @@ class Card(db.Model):
     header: Mapped[str] = mapped_column(String, nullable=False)
     content: Mapped[str] = mapped_column(String, nullable=False)
     links: Mapped[str] = mapped_column(String, nullable=True)
-    picture_path: Mapped[str] = mapped_column(String, nullable=True)
-    emoji: Mapped[str] = mapped_column(String, nullable=True)
+    picture: Mapped[str] = mapped_column(String, nullable=True)
+    country: Mapped[str] = mapped_column(String, nullable=True)
 
-    def __init__(self, header, content, links = None, emoji = None):
+    def __init__(self, header, content, links=None, emoji=None, picture=None):
         self.card_uuid == str(uuid4)
         self.header = header
         self.content = content
         self.links = links
         self.emoji = emoji
+        self.picture = picture
 
     def to_dict(self) -> dict:
         return {

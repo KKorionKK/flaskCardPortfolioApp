@@ -1,8 +1,7 @@
 # __init__
 
-import os
 
-from flask import Flask, render_template, url_for
+from flask import Flask
 from flask_bcrypt import Bcrypt
 from flask_sqlalchemy import SQLAlchemy
 from api.config import Config
@@ -11,11 +10,12 @@ db = SQLAlchemy()
 
 bcrypt = Bcrypt()
 
+
 def create_app():
     app = Flask(__name__)
     app.config.from_object(Config.get_config())
 
-    app.config['SESSION_COOKIE_MAX_SIZE'] = 300
+    app.config["SESSION_COOKIE_MAX_SIZE"] = 300
     db.init_app(app)
     bcrypt.init_app(app)
 
@@ -27,4 +27,3 @@ def create_app():
     app.register_blueprint(user_bp)
 
     return app
-

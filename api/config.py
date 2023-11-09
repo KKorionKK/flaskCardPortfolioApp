@@ -1,6 +1,7 @@
 from dotenv import load_dotenv, find_dotenv, dotenv_values
 from dataclasses import dataclass
 
+
 @dataclass
 class Config:
     DEBUG: bool

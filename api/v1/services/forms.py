@@ -13,9 +13,10 @@ class RegisterForm(LoginForm):
     name = StringField("Name", validators=[])
     username = StringField("Username", validators=[])
 
+
 class CreateForm(FlaskForm):
     header = StringField("Header")
     content = StringField("Content")
     link = StringField("Link")
-    emoji = SelectField("emoji", choices=countries)
+    country = SelectField("emoji", choices=countries)
     picture = FileField("Picture")

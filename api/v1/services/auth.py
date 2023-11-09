@@ -2,15 +2,12 @@ from flask_sqlalchemy import SQLAlchemy
 from api.v1.database import User
 from sqlalchemy import select
 from api import bcrypt
-from flask import make_response, Response, request, session, redirect
+from flask import make_response, Response, request
+
 
 def get_user_by_email(email: str, db: SQLAlchemy) -> User | None:
-    return db.session.scalar(
-        select(
-            User
-        )
-        .where(User.email == email)
-    )
+    return db.session.scalar(select(User).where(User.email == email))
+
 
 def user_login(user_data: dict[str, str], db: SQLAlchemy) -> tuple | Response:
     user: User | None = get_user_by_email(user_data.get("email"), db=db)
@@ -26,6 +23,7 @@ def user_login(user_data: dict[str, str], db: SQLAlchemy) -> tuple | Response:
                 return response
         else:
             return ("Неверные данные", 400)
+
 
 def user_register(user_data: dict[str, str], db: SQLAlchemy) -> tuple | Response:
     user: User | None = get_user_by_email(user_data.get("email"), db=db)
@@ -44,7 +42,6 @@ def user_register(user_data: dict[str, str], db: SQLAlchemy) -> tuple | Response
     return ("Пользователь успешно создан", 200)
 
 
-
 def authorization_required(endpoint):
     def decorated_function(*args, **kwargs):
         auth_token: str = request.cookies.get("auth_token")
@@ -58,4 +55,3 @@ def authorization_required(endpoint):
         return endpoint(*args, **kwargs)
 
     return decorated_function
-
